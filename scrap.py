@@ -13,28 +13,28 @@ def string_formatter(string):
 
 
 def main(url):
-    """Main program"""
+    """Main program function"""
     # reading page contents
     page = url.content
     soup = BeautifulSoup(page, "lxml")
 
     content = soup.find('div', {'class':'col-lg-9 col-md-12 col-sm-12'})
     countries_list = content.find_all("div", {'class':"pb30"})
-
-    # first task:
-    borderCountry_data = [] # list of dictionaries of country border
-    totalBorder_data = []
+    
 
     def get_country_details(country):
-        #print(country.contents)
         # Get country name
         country_name = country.h3.text
         
         # defining values defaults
+        borderCountry_data = [] # list of dictionaries of country border
+        totalBorder_data = []
+        
         border_total = '0 km'
         border_country = '-'
         border_length = '0 km'
         notes = '-'
+        
         for i in range(len(country.find_all('strong'))):
             # getting the total border
             if country.find('strong').text == 'total:':
@@ -50,7 +50,6 @@ def main(url):
             if country.find('strong'):
                 if country.find('strong').text == 'note:':
                     notes = country.find('strong').next_sibling.strip()
-                    #print(notes)
             else:
                 break
             
@@ -99,6 +98,7 @@ def csv_maker(borderCountry_data, totalBorder_data):
         writer.writeheader()
         writer.writerows(totalBorder_data)
         print("==> 'total_border data.csv' file created")
+
 
 
 # Main program
